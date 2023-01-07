@@ -5,6 +5,48 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: grid;
+  place-content: center;
+}
+
+ul, h4 {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  border-radius: 50%;
+  box-shadow: 3px 3px 3px #000;
+  width: 150px;
+  height: 150px;
+}
+
+ul li {
+  border-radius: 4px;
+  border: 1px solid #eee;
+  list-style: none;
+  margin-bottom: 16px;
+  max-width: 328px;
+  padding: 8px 32px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 4px 6px;
+  margin: 5px 0;
+  outline: none;
+}
+
+textarea {
+  margin-bottom: 8px;
+  padding-left: 5px;
+  font-family: inherit;
 }
 
 code {

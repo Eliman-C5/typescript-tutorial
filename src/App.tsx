@@ -1,24 +1,63 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { Sub } from './types';
 import './App.css';
+import Form from './components/Form';
+import List from './components/List'
+
+const INITIAL_STATE = [
+  {
+    nick: 'dapelu',
+    subMonths: 3,
+    avatar: 'https://i.pravatar.cc/150?u=dapelu',
+    description: 'Dapelu hace de moderadora veces'
+  },
+  {
+    nick: 'Sergio Serrano',
+    subMonths: 3,
+    avatar: 'https://i.pravatar.cc/150?u=sergio_serrano',
+  }
+]
+
+//Se recomienda separar el estado de el componente
+// EJEMPLO: interface "nombreDelComponente"State
+interface AppState {
+  subs: Array<Sub>
+  newSubsNumber: number
+}
+//Ya que normalmente un componente tiene varios estados y no solo uno. Se recomienda poner
+//dentro de la interface cada uno de los estados que puede tener mi componente
+//Asi sera mas facil de leer a la hora de usar el useState
 
 function App() {
+
+  const [subs, setSubs] = useState<AppState["subs"]>([]); //"En mis estados, busca el tipo subs"
+  //Esto tambien se puede escribir asi:
+  // const [subs, setSubs] = useState<Sub[]>([]);
+  //La unica diferencia es que en el primero se lee "Un array de tipo Sub" y en el segundo se lee al reves
+  //"Un tipo sub dentro de un array"
+  //const [newSubsNumber, setNewSubsNumber] = useState<AppState["newSubsNumber"]>(0)
+  
+  useEffect(() => {
+    
+    setSubs(INITIAL_STATE)
+  
+  }, [])
+  
+  const handleNewSub = (newSub: Sub): void => {
+    setSubs(subs => [...subs, newSub])
+  }
+  
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Midu subs</h1>
+      <List subs={subs} />
+      {/* <List subs={subs}>
+      {
+        [1, 2, 3].map(n => <div className="" style={{color: '#000'}}>{n}</div> )
+      }
+      </List> */}
+      <Form onNewSub={handleNewSub} />
     </div>
   );
 }
