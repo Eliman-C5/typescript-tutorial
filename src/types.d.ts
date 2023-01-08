@@ -5,3 +5,10 @@ export interface Sub {
   avatar: string
   description?: string
 }
+
+export type SubsRespondFromApi =  Array<{
+  nick: string,
+  months: number,
+  profileUrl: string,
+  description: string
+}>

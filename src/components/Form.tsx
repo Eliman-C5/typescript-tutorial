@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useReducer, useState } from "react"
+import useNewSubForm from "../hooks/useNewSubForm"
 import { Sub } from '../types'
 //Reutilizando interfaces
 //Hay que diferenciar entre dos tipos de interfaces: 
@@ -8,26 +9,20 @@ import { Sub } from '../types'
 //Se recomienda separar las interfaces de logica de negocios y reutilizarlas. Y nunca las dejes
 //dentro de los componentes porque no cumplen mayor funcion en el componente
 
-interface FormState {
-  inputValues: Sub
-}
-
 interface FormProps {
   onNewSub: (newSub: Sub) => void
 }
 
 const Form = ({onNewSub}: FormProps) => {
 
-  const [inputValues, setInputValues] = useState<FormState['inputValues']>({
-    nick: '',
-    subMonths: 0,
-    avatar: '',
-    description: ''
-  })
+  //const [inputValues, setInputValues] = useState<FormState['inputValues']>(INITIAL_STATE);
+  
+  const [inputValues, dispatch] = useNewSubForm()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onNewSub(inputValues)
+    onNewSub(inputValues);
+    handleClear()
   }
   
   //Implicatamente el event tiene un tipo any porque esta fuera del contexto del formulario
@@ -42,9 +37,22 @@ const Form = ({onNewSub}: FormProps) => {
   
   //PASO 3 (FUNCION TERMINADA CON TIPO DE DATO)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement| HTMLTextAreaElement>) => {
-    setInputValues({
-      ...inputValues,
-      [e.target.name]: e.target.value
+  
+    const {name, value} = e.target
+  
+    dispatch({
+      type: 'change_value',
+      payload: {
+        inputName: name,
+        inputValue: value
+      }
+    });
+    
+  }
+  
+  const handleClear = () => {
+    dispatch({
+      type: 'clear'
     })
   }
   
@@ -58,7 +66,8 @@ const Form = ({onNewSub}: FormProps) => {
       <input onChange={handleChange} value={inputValues.avatar} type="text" name="avatar" placeholder="avatar" />
       <textarea onChange={handleChange} value={inputValues.description} name="description" placeholder="description" />
       
-      <button>Save new sub!</button>
+      <button onClick={handleClear} type="button">Clear the form</button>
+      <button type="submit">Save new sub!</button>
     </form>
   )
 }
